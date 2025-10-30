@@ -1430,6 +1430,14 @@ textarea.form-input::-webkit-resizer {
   address {
     font-size: var(--fs-8);
   }
+
+  /**
+   * #NAVBAR (improve readability on small screens)
+   */
+  .navbar-link {
+    font-size: 14px; /* larger than default 11px */
+    padding: 18px 10px;
+  }
 }
 
 /**
