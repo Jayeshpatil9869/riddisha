@@ -137,3 +137,67 @@ for (let i = 0; i < navigationLinks.length; i++) {
     }
   });
 }
+
+// PROJECT MODAL (Portfolio detail)
+const projectItems = document.querySelectorAll(
+  ".project-item [data-project-open]"
+);
+const projectModalContainer = document.querySelector(
+  "[data-project-modal-container]"
+);
+const projectOverlay = document.querySelector("[data-project-overlay]");
+const projectModalCloseBtn = document.querySelector(
+  "[data-project-modal-close-btn]"
+);
+const projectModalTitle = document.querySelector("[data-project-modal-title]");
+const projectModalBody = document.querySelector("[data-project-modal-body]");
+
+const toggleProjectModal = function () {
+  projectModalContainer.classList.toggle("active");
+  projectOverlay.classList.toggle("active");
+};
+
+for (let i = 0; i < projectItems.length; i++) {
+  projectItems[i].addEventListener("click", function (e) {
+    e.preventDefault();
+    const item = this.closest(".project-item");
+    const title = item.getAttribute("data-project-title") || "Project";
+    const imagesAttr = item.getAttribute("data-images") || "";
+    const images = imagesAttr
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    projectModalTitle.textContent = title;
+    projectModalBody.innerHTML = images
+      .map(
+        (src) =>
+          '<figure class="project-detail-img"><img src="' +
+          src +
+          '" alt="' +
+          title +
+          '" loading="lazy"/></figure>'
+      )
+      .join("");
+
+    toggleProjectModal();
+  });
+}
+
+projectModalCloseBtn &&
+  projectModalCloseBtn.addEventListener("click", toggleProjectModal);
+projectOverlay && projectOverlay.addEventListener("click", toggleProjectModal);
+
+// Navigate to contact from project modal CTA
+document.addEventListener("click", function (e) {
+  const target = e.target.closest(".project-cta");
+  if (!target) return;
+  e.preventDefault();
+  toggleProjectModal();
+  for (let i = 0; i < navigationLinks.length; i++) {
+    if (navigationLinks[i].innerText.trim().toLowerCase() === "contact") {
+      navigationLinks[i].click();
+      break;
+    }
+  }
+});
