@@ -151,24 +151,32 @@ const projectModalCloseBtn = document.querySelector(
 );
 const projectModalTitle = document.querySelector("[data-project-modal-title]");
 const projectModalBody = document.querySelector("[data-project-modal-body]");
+const projectPrevBtn = document.querySelector("[data-project-prev]");
+const projectNextBtn = document.querySelector("[data-project-next]");
 
-const toggleProjectModal = function () {
-  projectModalContainer.classList.toggle("active");
-  projectOverlay.classList.toggle("active");
-};
+let currentProjectList = [];
+let currentProjectIndex = -1;
 
-for (let i = 0; i < projectItems.length; i++) {
-  projectItems[i].addEventListener("click", function (e) {
-    e.preventDefault();
-    const item = this.closest(".project-item");
-    const title = item.getAttribute("data-project-title") || "Project";
-    const imagesAttr = item.getAttribute("data-images") || "";
-    const images = imagesAttr
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+const renderProjectFromItem = function (item) {
+  if (!item) return;
+  const title = item.getAttribute("data-project-title") || "Project";
+  const videoSrc = item.getAttribute("data-video");
+  const poster = item.getAttribute("data-poster") || "";
+  const imagesAttr = item.getAttribute("data-images") || "";
+  const images = imagesAttr
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-    projectModalTitle.textContent = title;
+  projectModalTitle.textContent = title;
+  if (videoSrc) {
+    projectModalBody.innerHTML =
+      '<figure class="project-detail-img"><video controls autoplay playsinline poster="' +
+      poster +
+      '" style="width:100%;border-radius:12px"><source src="' +
+      videoSrc +
+      '" type="video/mp4"></video></figure>';
+  } else {
     projectModalBody.innerHTML = images
       .map(
         (src) =>
@@ -179,14 +187,50 @@ for (let i = 0; i < projectItems.length; i++) {
           '" loading="lazy"/></figure>'
       )
       .join("");
+  }
+};
+
+const toggleProjectModal = function () {
+  projectModalContainer.classList.toggle("active");
+  projectOverlay.classList.toggle("active");
+};
+
+for (let i = 0; i < projectItems.length; i++) {
+  projectItems[i].addEventListener("click", function (e) {
+    e.preventDefault();
+    const item = this.closest(".project-item");
+    currentProjectList = Array.from(
+      document.querySelectorAll(".project-item.active")
+    );
+    currentProjectIndex = currentProjectList.indexOf(item);
+    renderProjectFromItem(item);
 
     toggleProjectModal();
+    const showNav = currentProjectList.length > 1;
+    if (projectPrevBtn)
+      projectPrevBtn.style.display = showNav ? "flex" : "none";
+    if (projectNextBtn)
+      projectNextBtn.style.display = showNav ? "flex" : "none";
   });
 }
 
 projectModalCloseBtn &&
   projectModalCloseBtn.addEventListener("click", toggleProjectModal);
 projectOverlay && projectOverlay.addEventListener("click", toggleProjectModal);
+
+// Pause video when modal closes
+document.addEventListener("click", function (e) {
+  const closeClicked =
+    e.target.closest("[data-project-modal-close-btn]") ||
+    e.target.closest("[data-project-overlay]");
+  if (!closeClicked) return;
+  const vid = projectModalBody && projectModalBody.querySelector("video");
+  if (vid) {
+    try {
+      vid.pause();
+    } catch (_) {}
+  }
+});
 
 // Navigate to contact from project modal CTA
 document.addEventListener("click", function (e) {
@@ -201,3 +245,20 @@ document.addEventListener("click", function (e) {
     }
   }
 });
+
+// Next/Prev navigation inside project modal
+projectNextBtn &&
+  projectNextBtn.addEventListener("click", function () {
+    if (!currentProjectList.length) return;
+    currentProjectIndex = (currentProjectIndex + 1) % currentProjectList.length;
+    renderProjectFromItem(currentProjectList[currentProjectIndex]);
+  });
+
+projectPrevBtn &&
+  projectPrevBtn.addEventListener("click", function () {
+    if (!currentProjectList.length) return;
+    currentProjectIndex =
+      (currentProjectIndex - 1 + currentProjectList.length) %
+      currentProjectList.length;
+    renderProjectFromItem(currentProjectList[currentProjectIndex]);
+  });

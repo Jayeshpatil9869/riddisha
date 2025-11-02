@@ -30,13 +30,13 @@
     hsl(240, 2%, 13%);
   --bg-gradient-yellow-1: linear-gradient(
     to bottom right,
-    hsl(45, 100%, 71%) 0%,
-    hsla(36, 100%, 69%, 0) 50%
+    #f9f594 0%,
+    rgba(249, 245, 148, 0) 50%
   );
   --bg-gradient-yellow-2: linear-gradient(
       135deg,
-      hsla(45, 100%, 71%, 0.251) 0%,
-      hsla(35, 100%, 68%, 0) 59.86%
+      rgba(249, 245, 148, 0.251) 0%,
+      rgba(249, 245, 148, 0) 59.86%
     ),
     hsl(240, 2%, 13%);
   --border-gradient-onyx: linear-gradient(
@@ -44,11 +44,7 @@
     hsl(0, 0%, 25%) 0%,
     hsla(0, 0%, 25%, 0) 50%
   );
-  --text-gradient-yellow: linear-gradient(
-    to right,
-    hsl(45, 100%, 72%),
-    hsl(35, 100%, 68%)
-  );
+  --text-gradient-yellow: linear-gradient(to right, #f9f594, #f9f594);
 
   /* solid */
 
@@ -59,8 +55,8 @@
   --smoky-black: hsl(0, 0%, 7%);
   --white-1: hsl(0, 0%, 100%);
   --white-2: hsl(0, 0%, 98%);
-  --orange-yellow-crayola: hsl(45, 100%, 72%);
-  --vegas-gold: hsl(45, 54%, 58%);
+  --orange-yellow-crayola: #f9f594;
+  --vegas-gold: #f9f594;
   --light-gray: hsl(0, 0%, 84%);
   --light-gray-70: hsla(0, 0%, 84%, 0.7);
   --bittersweet-shimmer: hsl(0, 43%, 51%);
@@ -868,6 +864,89 @@ main {
   height: auto;
   border-radius: 12px;
 }
+/* Ensure embedded videos in project modal are responsive */
+.project-detail-images video {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+/* Lightbox navigation arrows */
+.project-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--onyx);
+  color: var(--white-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: var(--transition-1);
+}
+.project-nav-btn:hover {
+  opacity: 1;
+}
+.project-nav-btn.prev {
+  left: 8px;
+}
+.project-nav-btn.next {
+  right: 8px;
+}
+
+/* Laptop-only adjustments: keep project modal/video within viewport height */
+@media (min-width: 1024px) and (max-width: 1920px) {
+  .project-modal {
+    max-height: 90vh;
+    overflow-y: auto;
+    /* modern scrollbar (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(249, 245, 148, 0.45) transparent;
+  }
+  .project-detail-images {
+    max-height: 78vh; /* leave room for header/CTA */
+    overflow-y: auto;
+    /* modern scrollbar (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(249, 245, 148, 0.45) transparent;
+  }
+  .project-detail-images video,
+  .project-detail-images img {
+    max-height: 74vh;
+    object-fit: contain;
+  }
+}
+
+/* modern thin scrollbar for project modal (WebKit) */
+.project-modal::-webkit-scrollbar,
+.project-detail-images::-webkit-scrollbar {
+  width: 8px;
+}
+.project-modal::-webkit-scrollbar-track,
+.project-detail-images::-webkit-scrollbar-track {
+  background: transparent;
+}
+.project-modal::-webkit-scrollbar-thumb,
+.project-detail-images::-webkit-scrollbar-thumb {
+  background: rgba(249, 245, 148, 0.35);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.project-modal:hover::-webkit-scrollbar-thumb,
+.project-detail-images:hover::-webkit-scrollbar-thumb {
+  background: rgba(249, 245, 148, 0.6);
+}
+.project-modal::-webkit-scrollbar-button,
+.project-detail-images::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
 
 .modal-close-btn {
   position: absolute;
@@ -1180,7 +1259,7 @@ main {
 .project-img {
   position: relative;
   width: 100%;
-  height: 200px;
+  aspect-ratio: 1 / 1; /* keep thumbnails perfectly square */
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 15px;
@@ -1845,12 +1924,42 @@ textarea.form-input::-webkit-resizer {
     gap: 25px;
     padding-left: 5px;
     margin-bottom: 30px;
+    flex-wrap: nowrap; /* keep buttons on one line */
+    overflow-x: auto; /* allow horizontal scroll if overflow */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--orange-yellow-crayola) transparent;
+  }
+
+  /* Modern thin scrollbar for filter row (WebKit) */
+  .filter-list::-webkit-scrollbar {
+    height: 6px;
+  }
+  .filter-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .filter-list::-webkit-scrollbar-thumb {
+    background: rgba(249, 245, 148, 0.35); /* #f9f594 at 35% */
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .filter-list:hover::-webkit-scrollbar-thumb {
+    background: rgba(249, 245, 148, 0.6);
+  }
+  .filter-list::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .filter-item button {
     color: var(--light-gray);
     font-size: var(--fs-5);
     transition: var(--transition-1);
+    white-space: nowrap; /* prevent awkward wrapping of long labels */
+    padding: 8px 12px;
+    border-radius: 10px;
   }
 
   .filter-item button:hover {
