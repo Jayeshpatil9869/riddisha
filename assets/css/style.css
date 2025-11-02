@@ -838,6 +838,11 @@ main {
   height: 42px;
   border-radius: 50%;
 }
+.project-author-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .project-author-name {
   color: var(--white-2);
   font-weight: var(--fw-500);
@@ -1015,7 +1020,7 @@ main {
 .clients-list {
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   gap: 15px;
   margin: 0 -15px;
   padding: 25px;
@@ -1030,10 +1035,24 @@ main {
 .clients-item {
   min-width: 50%;
   scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+}
+
+.clients-item a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .clients-item img {
   width: 100%;
+  height: 100%;
+  object-fit: contain;
   filter: grayscale(1);
   transition: var(--transition-1);
 }
@@ -1479,6 +1498,7 @@ textarea.form-input::-webkit-resizer {
 
   .clients-item {
     min-width: calc(33.33% - 10px);
+    height: 90px;
   }
 
   /**
@@ -1488,6 +1508,51 @@ textarea.form-input::-webkit-resizer {
   .project-img,
   .blog-banner-box {
     height: auto;
+  }
+}
+
+/**
+ * responsive smaller than 380px screen (very small mobile)
+ */
+
+@media (max-width: 380px) {
+  /**
+   * #PROJECT MODAL - Extra small mobile responsiveness
+   */
+  .project-modal {
+    padding: 12px;
+    margin: 8px 4px;
+  }
+
+  .modal-close-btn {
+    top: 10px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+
+  .project-detail-header {
+    padding-right: 35px; /* Space for close button */
+    gap: 10px;
+  }
+
+  .project-cta {
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .project-author {
+    gap: 8px;
+  }
+
+  .project-author-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .project-author-name {
+    font-size: var(--fs-7);
   }
 }
 
@@ -1516,6 +1581,60 @@ textarea.form-input::-webkit-resizer {
   .navbar-link {
     font-size: 14px; /* larger than default 11px */
     padding: 18px 10px;
+  }
+
+  /**
+   * #PROJECT MODAL - Mobile responsiveness
+   */
+  .project-modal {
+    padding: 16px;
+    margin: 12px 8px;
+  }
+
+  .modal-close-btn {
+    top: 12px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+
+  .project-detail-header {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-right: 40px; /* Space for close button */
+    margin-bottom: 12px;
+  }
+
+  .project-author {
+    flex: 1;
+    min-width: 0; /* Allow shrinking */
+  }
+
+  .project-cta {
+    padding: 8px 12px;
+    font-size: var(--fs-8);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .project-author-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0; /* Allow text truncation if needed */
+  }
+
+  .project-author-name {
+    font-size: var(--fs-6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .project-author-status {
+    font-size: var(--fs-8);
   }
 }
 
@@ -1771,6 +1890,7 @@ textarea.form-input::-webkit-resizer {
 
   .clients-item {
     min-width: calc(33.33% - 35px);
+    height: 100px;
   }
 
   /**
@@ -2080,6 +2200,7 @@ textarea.form-input::-webkit-resizer {
 
   .clients-item {
     min-width: calc(25% - 38px);
+    height: 120px;
   }
 
   /**
