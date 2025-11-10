@@ -1053,12 +1053,8 @@ main {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: grayscale(1);
+  filter: none;
   transition: var(--transition-1);
-}
-
-.clients-item img:hover {
-  filter: grayscale(0);
 }
 
 /*-----------------------------------*\
